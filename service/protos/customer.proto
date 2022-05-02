@@ -1,0 +1,21 @@
+syntax = "proto3";
+package customer;
+
+option go_package = "github.com/Nviswateja/CustomerTrackerService/service/protos/";
+message CustomerMessage{
+    string Name = 1;
+}
+
+service CustomerService{
+    rpc AddCustomerDetails(CustomerMessageRequest) returns(CustomerMessageReply){}
+}
+
+// The request message containing the user's name.
+message CustomerMessageRequest {
+  string name = 1;
+}
+
+// The response message
+message CustomerMessageReply {
+  string message = 1;
+}

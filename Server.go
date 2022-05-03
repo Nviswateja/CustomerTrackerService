@@ -8,22 +8,27 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/Nviswateja/CustomerTrackerService/service/protos"
+	pb1 "github.com/Nviswateja/CustomerTrackerService/service/protos/Version1Protos"
+	pb2 "github.com/Nviswateja/CustomerTrackerService/service/protos/Version2Protos"
 )
 
 type server struct {
-	pb.UnimplementedCustomerServiceServer
+	pb1.UnimplementedCustomerServiceServer
+}
+
+type serverV2 struct {
+	pb2.UnimplementedCustomerServiceServer
 }
 
 var customerData = make([]string, 2)
 func (c *server) AddCustomerDetails(ctx context.Context, in *pb.CustomerMessageRequest) (*pb.CustomerMessageReply, error) {
 	fmt.Println("Customer details:", in.Name)
 	customerData = append(customerData, in.Name)
-	return &pb.CustomerMessageReply{Message: "Hello " + in.GetName()}, nil
+	return &pb1.CustomerMessageReply{Message: "Hello " + in.GetName()}, nil
 }
 
 func (c *server) GetCustomers(ctx context.Context, in *pb.GetCustomerMessageRequest) (*pb.CustomerDetailsReply, error) {
-	return &pb.CustomerDetailsReply{Customers: customerData}, nil
+	return &pb1.CustomerDetailsReply{Customers: customerData}, nil
 }
 
 func main() {
@@ -34,7 +39,8 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterCustomerServiceServer(grpcServer, &server{})
+	pb1.RegisterCustomerServiceServer(grpcServer, &server{})
+	pb2.RegisterCustomerServiceServer(grpcServer, &serverV2{})
 	log.Printf("server listening at %v", conn.Addr())
 	if err := grpcServer.Serve(conn); err != nil {
 		log.Fatalf("failed to serve: %v", err)

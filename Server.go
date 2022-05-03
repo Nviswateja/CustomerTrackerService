@@ -21,14 +21,21 @@ type serverV2 struct {
 }
 
 var customerData = make([]string, 2)
-func (c *server) AddCustomerDetails(ctx context.Context, in *pb.CustomerMessageRequest) (*pb.CustomerMessageReply, error) {
+var customerDetails = make([]*pb2.Customer, 2)
+
+func (c *server) AddCustomerDetails(ctx context.Context, in *pb1.CustomerMessageRequest) (*pb1.CustomerMessageReply, error) {
 	fmt.Println("Customer details:", in.Name)
 	customerData = append(customerData, in.Name)
+	customerDetails = append(customerDetails, &pb2.Customer{Name: in.Name, PhoneNumber: "123"})
 	return &pb1.CustomerMessageReply{Message: "Hello " + in.GetName()}, nil
 }
 
-func (c *server) GetCustomers(ctx context.Context, in *pb.GetCustomerMessageRequest) (*pb.CustomerDetailsReply, error) {
+func (c *server) GetCustomers(ctx context.Context, in *pb1.GetCustomerMessageRequest) (*pb1.CustomerDetailsReply, error) {
 	return &pb1.CustomerDetailsReply{Customers: customerData}, nil
+}
+
+func (c *serverV2) GetCustomerWithName(ctx context.Context, in *pb2.GetCustomerMessageRequest) (*pb2.CustomerDetailsReply, error) {
+	return &pb2.CustomerDetailsReply{Customers: customerDetails}, nil
 }
 
 func main() {

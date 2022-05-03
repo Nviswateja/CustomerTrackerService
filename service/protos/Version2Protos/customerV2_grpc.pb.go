@@ -18,86 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// CustomerServiceV2Client is the client API for CustomerServiceV2 service.
+// CustomerServiceClient is the client API for CustomerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CustomerServiceV2Client interface {
-	GetCustomerWithName(ctx context.Context, in *GetCustomerMessageRequestV2, opts ...grpc.CallOption) (*CustomerDetailsV2Reply, error)
+type CustomerServiceClient interface {
+	GetCustomerWithName(ctx context.Context, in *GetCustomerMessageRequest, opts ...grpc.CallOption) (*CustomerDetailsReply, error)
 }
 
-type customerServiceV2Client struct {
+type customerServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCustomerServiceV2Client(cc grpc.ClientConnInterface) CustomerServiceV2Client {
-	return &customerServiceV2Client{cc}
+func NewCustomerServiceClient(cc grpc.ClientConnInterface) CustomerServiceClient {
+	return &customerServiceClient{cc}
 }
 
-func (c *customerServiceV2Client) GetCustomerWithName(ctx context.Context, in *GetCustomerMessageRequestV2, opts ...grpc.CallOption) (*CustomerDetailsV2Reply, error) {
-	out := new(CustomerDetailsV2Reply)
-	err := c.cc.Invoke(ctx, "/customerV2.CustomerServiceV2/GetCustomerWithName", in, out, opts...)
+func (c *customerServiceClient) GetCustomerWithName(ctx context.Context, in *GetCustomerMessageRequest, opts ...grpc.CallOption) (*CustomerDetailsReply, error) {
+	out := new(CustomerDetailsReply)
+	err := c.cc.Invoke(ctx, "/customerV2.CustomerService/GetCustomerWithName", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CustomerServiceV2Server is the server API for CustomerServiceV2 service.
-// All implementations must embed UnimplementedCustomerServiceV2Server
+// CustomerServiceServer is the server API for CustomerService service.
+// All implementations must embed UnimplementedCustomerServiceServer
 // for forward compatibility
-type CustomerServiceV2Server interface {
-	GetCustomerWithName(context.Context, *GetCustomerMessageRequestV2) (*CustomerDetailsV2Reply, error)
-	mustEmbedUnimplementedCustomerServiceV2Server()
+type CustomerServiceServer interface {
+	GetCustomerWithName(context.Context, *GetCustomerMessageRequest) (*CustomerDetailsReply, error)
+	mustEmbedUnimplementedCustomerServiceServer()
 }
 
-// UnimplementedCustomerServiceV2Server must be embedded to have forward compatible implementations.
-type UnimplementedCustomerServiceV2Server struct {
+// UnimplementedCustomerServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCustomerServiceServer struct {
 }
 
-func (UnimplementedCustomerServiceV2Server) GetCustomerWithName(context.Context, *GetCustomerMessageRequestV2) (*CustomerDetailsV2Reply, error) {
+func (UnimplementedCustomerServiceServer) GetCustomerWithName(context.Context, *GetCustomerMessageRequest) (*CustomerDetailsReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCustomerWithName not implemented")
 }
-func (UnimplementedCustomerServiceV2Server) mustEmbedUnimplementedCustomerServiceV2Server() {}
+func (UnimplementedCustomerServiceServer) mustEmbedUnimplementedCustomerServiceServer() {}
 
-// UnsafeCustomerServiceV2Server may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CustomerServiceV2Server will
+// UnsafeCustomerServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CustomerServiceServer will
 // result in compilation errors.
-type UnsafeCustomerServiceV2Server interface {
-	mustEmbedUnimplementedCustomerServiceV2Server()
+type UnsafeCustomerServiceServer interface {
+	mustEmbedUnimplementedCustomerServiceServer()
 }
 
-func RegisterCustomerServiceV2Server(s grpc.ServiceRegistrar, srv CustomerServiceV2Server) {
-	s.RegisterService(&CustomerServiceV2_ServiceDesc, srv)
+func RegisterCustomerServiceServer(s grpc.ServiceRegistrar, srv CustomerServiceServer) {
+	s.RegisterService(&CustomerService_ServiceDesc, srv)
 }
 
-func _CustomerServiceV2_GetCustomerWithName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCustomerMessageRequestV2)
+func _CustomerService_GetCustomerWithName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCustomerMessageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CustomerServiceV2Server).GetCustomerWithName(ctx, in)
+		return srv.(CustomerServiceServer).GetCustomerWithName(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/customerV2.CustomerServiceV2/GetCustomerWithName",
+		FullMethod: "/customerV2.CustomerService/GetCustomerWithName",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CustomerServiceV2Server).GetCustomerWithName(ctx, req.(*GetCustomerMessageRequestV2))
+		return srv.(CustomerServiceServer).GetCustomerWithName(ctx, req.(*GetCustomerMessageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CustomerServiceV2_ServiceDesc is the grpc.ServiceDesc for CustomerServiceV2 service.
+// CustomerService_ServiceDesc is the grpc.ServiceDesc for CustomerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CustomerServiceV2_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "customerV2.CustomerServiceV2",
-	HandlerType: (*CustomerServiceV2Server)(nil),
+var CustomerService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "customerV2.CustomerService",
+	HandlerType: (*CustomerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetCustomerWithName",
-			Handler:    _CustomerServiceV2_GetCustomerWithName_Handler,
+			Handler:    _CustomerService_GetCustomerWithName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

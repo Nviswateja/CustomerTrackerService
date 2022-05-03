@@ -7,14 +7,14 @@ message Customer{
     string phoneNumber = 2;
 }
 
-service CustomerServiceV2{
-    rpc GetCustomerWithName(GetCustomerMessageRequestV2) returns(CustomerDetailsV2Reply) {}
+service CustomerService{
+    rpc GetCustomerWithName(GetCustomerMessageRequest) returns(CustomerDetailsReply) {}
 }
 
 // The request message containing the user's name.
-message GetCustomerMessageRequestV2 {
+message GetCustomerMessageRequest {
 }
 
-message CustomerDetailsV2Reply{
+message CustomerDetailsReply{
   repeated Customer customers =1;
 }

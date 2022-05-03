@@ -8,14 +8,24 @@ message CustomerMessage{
 
 service CustomerService{
     rpc AddCustomerDetails(CustomerMessageRequest) returns(CustomerMessageReply){}
+    rpc GetCustomers(GetCustomerMessageRequest) returns(CustomerDetailsReply) {}
 }
 
 // The request message containing the user's name.
 message CustomerMessageRequest {
   string name = 1;
+  string phoneNumber = 2;
+}
+
+// The request message containing the user's name.
+message GetCustomerMessageRequest {
 }
 
 // The response message
 message CustomerMessageReply {
   string message = 1;
+}
+
+message CustomerDetailsReply{
+  repeated string customers =1;
 }

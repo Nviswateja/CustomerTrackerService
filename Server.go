@@ -15,9 +15,15 @@ type server struct {
 	pb.UnimplementedCustomerServiceServer
 }
 
+var customerData = make([]string, 2)
 func (c *server) AddCustomerDetails(ctx context.Context, in *pb.CustomerMessageRequest) (*pb.CustomerMessageReply, error) {
 	fmt.Println("Customer details:", in.Name)
+	customerData = append(customerData, in.Name)
 	return &pb.CustomerMessageReply{Message: "Hello " + in.GetName()}, nil
+}
+
+func (c *server) GetCustomers(ctx context.Context, in *pb.GetCustomerMessageRequest) (*pb.CustomerDetailsReply, error) {
+	return &pb.CustomerDetailsReply{Customers: customerData}, nil
 }
 
 func main() {
